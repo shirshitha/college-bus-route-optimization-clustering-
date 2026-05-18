@@ -1,0 +1,44 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+
+# Read dataset
+df = pd.read_csv("Student_.csv")
+
+# Select location columns
+X = df[['Latitude', 'Longitude']]
+
+# Apply K-Means
+kmeans = KMeans(n_clusters=4, random_state=0)
+
+# Create clusters
+df['Cluster'] = kmeans.fit_predict(X)
+
+# Print clustered data
+print(df)
+
+# Plot graph
+plt.figure(figsize=(8,6))
+
+plt.scatter(df['Longitude'],
+            df['Latitude'],
+            c=df['Cluster'],
+            cmap='viridis',
+            s=100)
+
+# Plot centroids
+centroids = kmeans.cluster_centers_
+
+plt.scatter(centroids[:,1],
+            centroids[:,0],
+            color='red',
+            marker='X',
+            s=250)
+
+plt.xlabel("Longitude")
+plt.ylabel("Latitude")
+plt.title("College Bus Route Optimization")
+
+plt.grid(True)
+
+plt.show()
